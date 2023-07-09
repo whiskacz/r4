@@ -1,17 +1,44 @@
-import React from 'react';
+import React from "react";
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import { useState, useEffect } from "react";
+import { AiFillFileText, AiOutlineUser, AiOutlineTwitter} from 'react-icons/ai'
+import './index.css'
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+
+const R4 = () => {
+  
+    const [testimonials, setTestimonials] = useState("")
+    const [items, setItems] = useState()
+
+
+    useEffect(() => {
+        fetch(`https://jsonplaceholder.typicode.com/${testimonials}`)
+      .then(response => response.json())
+      .then(json => setItems(json))
+    }, [testimonials])
+
+
+    return (
+        <div className="wrapper">
+            <header>Testimonials</header>
+            <div className="allButtons">
+                <button onClick={() => setTestimonials("Posts")}><AiFillFileText />Posts</button>
+                <button onClick={() => setTestimonials("Users")}><AiOutlineUser />Users</button>
+                <button onClick={() => setTestimonials("Comments")}><AiOutlineTwitter />Comments</button>
+            </div>
+            <footer className="list">{!testimonials ? "select from above" : testimonials} 
+            </footer>
+            <div> {!items ? null : items.map((item) => {
+                return (<div key={item.id}>
+                    {item.title}
+                    {item.name}
+                </div>
+            )})}</div>
+        </div>
+    )
+}
+
+const el = document.getElementById('root')
+const root = ReactDOM.createRoot(el)
+root.render(<R4 />)
